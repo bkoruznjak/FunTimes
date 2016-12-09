@@ -30,4 +30,19 @@ public class NewsModel implements NewsActivityMVP.Model {
             }
         });
     }
+
+    @Override
+    public Observable<ViewModel> newResults(int pageNumber) {
+        return repository.getPageResultsFromNetwork(pageNumber).map(new Func1<Doc, ViewModel>() {
+
+            @Override
+            public ViewModel call(Doc docResult) {
+                String mediaUrl = "";
+                if (docResult.getMultimedia() != null && !docResult.getMultimedia().isEmpty()) {
+                    mediaUrl = docResult.getMultimedia().get(0).getUrl();
+                }
+                return new ViewModel(docResult.getLeadParagraph(), docResult.getPubDate(), docResult.getAbstract(), mediaUrl);
+            }
+        });
+    }
 }

@@ -29,7 +29,7 @@ public class NewsActivity extends AppCompatActivity implements NewsActivityMVP.V
 
     private ListAdapter listAdapter;
     private List<ViewModel> resultList = new ArrayList<>();
-    private int pageNumber = 1;
+    private int pageNumber = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,8 @@ public class NewsActivity extends AppCompatActivity implements NewsActivityMVP.V
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     if (isLastItemDisplaying(mBinding.recyclerView)) {
-                        Log.d("bbb", "dosao do kraja ucitaj novi page:" + pageNumber);
+                        presenter.fetchMoreData(++pageNumber);
+                        Log.d("bbb", "loading data for page:" + pageNumber);
                     }
                 }
                 return false;

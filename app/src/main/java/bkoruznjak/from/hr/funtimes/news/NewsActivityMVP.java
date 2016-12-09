@@ -25,11 +25,15 @@ public interface NewsActivityMVP {
         void loadData();
 
         void rxUnsubscribe();
+
+        void fetchMoreData(int pageNumber);
     }
 
     interface Model {
 
         Observable<ViewModel> result();
+
+        Observable<ViewModel> newResults(int pageNumber);
 
     }
 }

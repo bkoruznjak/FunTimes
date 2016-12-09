@@ -16,7 +16,7 @@ public interface NYTimesService {
     Observable<ArticleModel> listAllArticles(@Query("sort") String sort);
 
     @GET("svc/search/v2/articlesearch.json")
-    Observable<ArticleModel> listArticlesByPage(@Query("page") String pagenumber, @Query("sort") String sort);
+    Observable<ArticleModel> listArticlesByPage(@Query("page") int pageNumber, @Query("sort") String sort);
 
     @GET("svc/search/v2/articlesearch.json")
     Observable<ArticleModel> listArticlesByQuery(@Path("q") String query, @Query("sort") String sort);

@@ -13,6 +13,8 @@ public interface Repository {
 
     Observable<Doc> getResultsFromNetwork();
 
+    Observable<Doc> getPageResultsFromNetwork(int pageNumber);
+
     Observable<Doc> getResultData();
 
 }

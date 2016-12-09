@@ -40,7 +40,7 @@ public class NewsActivityPresenter implements NewsActivityMVP.Presenter {
             public void onError(Throwable e) {
                 e.printStackTrace();
                 if (mNewsView != null) {
-                    mNewsView.showSnackbar("Error getting movies");
+                    mNewsView.showSnackbar("Error loading news data");
                 }
             }
 
@@ -60,5 +60,30 @@ public class NewsActivityPresenter implements NewsActivityMVP.Presenter {
                 subscription.unsubscribe();
             }
         }
+    }
+
+    @Override
+    public void fetchMoreData(int pageNumber) {
+        subscription = mRepositoryModel.newResults(pageNumber).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ViewModel>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                if (mNewsView != null) {
+                    mNewsView.showSnackbar("Error fetching more news");
+                }
+            }
+
+            @Override
+            public void onNext(ViewModel viewModel) {
+                if (mNewsView != null) {
+                    mNewsView.updateData(viewModel);
+                }
+            }
+        });
     }
 }
