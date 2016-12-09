@@ -46,24 +46,6 @@ public class NewsRepository implements Repository {
     }
 
     @Override
-    public Observable<Doc> getResultsFromNetwork() {
-
-        Observable<ArticleModel> newsObservable = timesApiService.listArticlesByPage(0, NetworkConstants.SORT_NEWEST);
-
-        return newsObservable.concatMap(new Func1<ArticleModel, Observable<Doc>>() {
-            @Override
-            public Observable<Doc> call(ArticleModel articleModel) {
-                return Observable.from(articleModel.getResponse().getDocs());
-            }
-        }).doOnNext(new Action1<Doc>() {
-            @Override
-            public void call(Doc result) {
-                results.add(result);
-            }
-        });
-    }
-
-    @Override
     public Observable<Doc> getPageResultsFromNetwork(int pageNumber) {
         Observable<ArticleModel> newsObservable = timesApiService.listArticlesByPage(pageNumber, NetworkConstants.SORT_NEWEST);
 
@@ -82,6 +64,6 @@ public class NewsRepository implements Repository {
 
     @Override
     public Observable<Doc> getResultData() {
-        return getResultsFromMemory().switchIfEmpty(getResultsFromNetwork());
+        return getResultsFromMemory().switchIfEmpty(getPageResultsFromNetwork(0));
     }
 }
