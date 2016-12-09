@@ -1,6 +1,9 @@
 package bkoruznjak.from.hr.funtimes.news;
 
+import java.text.SimpleDateFormat;
+
 import bkoruznjak.from.hr.funtimes.network.model.Doc;
+import bkoruznjak.from.hr.funtimes.util.TimeConverter;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -26,7 +29,8 @@ public class NewsModel implements NewsActivityMVP.Model {
                 if (docResult.getMultimedia() != null && !docResult.getMultimedia().isEmpty()) {
                     mediaUrl = docResult.getMultimedia().get(0).getUrl();
                 }
-                return new ViewModel(docResult.getLeadParagraph(), docResult.getPubDate(), docResult.getAbstract(), mediaUrl);
+                String prettyTime = TimeConverter.INSTANCE.convertToPrettyTime(docResult.getPubDate(), new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ"));
+                return new ViewModel(docResult.getHeadline().getMain(), prettyTime, docResult.getAbstract(), mediaUrl);
             }
         });
     }
@@ -41,7 +45,8 @@ public class NewsModel implements NewsActivityMVP.Model {
                 if (docResult.getMultimedia() != null && !docResult.getMultimedia().isEmpty()) {
                     mediaUrl = docResult.getMultimedia().get(0).getUrl();
                 }
-                return new ViewModel(docResult.getLeadParagraph(), docResult.getPubDate(), docResult.getAbstract(), mediaUrl);
+                String prettyTime = TimeConverter.INSTANCE.convertToPrettyTime(docResult.getPubDate(), new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ"));
+                return new ViewModel(docResult.getHeadline().getMain(), prettyTime, docResult.getAbstract(), mediaUrl);
             }
         });
     }

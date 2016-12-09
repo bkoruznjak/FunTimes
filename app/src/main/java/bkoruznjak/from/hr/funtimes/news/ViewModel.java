@@ -7,7 +7,7 @@ public class ViewModel {
     private String abstraction;
     private String mediaUrl;
 
-    public ViewModel(String publishedTime, String title, String abstraction, String mediaUrl) {
+    public ViewModel(String title, String publishedTime, String abstraction, String mediaUrl) {
         this.title = title;
         this.publishedTime = publishedTime;
         this.abstraction = abstraction;
