@@ -1,5 +1,7 @@
 package bkoruznjak.from.hr.funtimes.news;
 
+import android.support.v7.widget.RecyclerView;
+
 import rx.Observable;
 
 /**
@@ -12,6 +14,8 @@ public interface NewsActivityMVP {
         void updateData(ViewModel viewModel);
 
         void showSnackbar(String s);
+
+        boolean isLastItemDisplaying(RecyclerView recyclerView);
     }
 
     interface Presenter {
