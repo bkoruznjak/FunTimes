@@ -14,19 +14,19 @@ public class ViewModel {
         this.mediaUrl = mediaUrl;
     }
 
-    public String gettitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void settitle(String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getpublishedTime() {
+    public String getPublishedTime() {
         return publishedTime;
     }
 
-    public void setpublishedTime(String publishedTime) {
+    public void setPublishedTime(String publishedTime) {
         this.publishedTime = publishedTime;
     }
 

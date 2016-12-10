@@ -58,25 +58,27 @@ public class NewsActivity extends AppCompatActivity implements NewsActivityMVP.V
             }
         });
 
-        presenter.setView(this);
-        presenter.loadData();
-
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStart() {
+        super.onStart();
+        presenter.setView(this);
+        presenter.loadData();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
         presenter.rxUnsubscribe();
+        resultList.clear();
+        listAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void updateData(ViewModel viewModel) {
         resultList.add(viewModel);
-        if (resultList.isEmpty()) {
-            listAdapter.notifyItemInserted(0);
-        } else {
-            listAdapter.notifyItemInserted(resultList.size() - 1);
-        }
+        listAdapter.notifyItemInserted(resultList.size() - 1);
         Log.d("bbb", "updateData: " + resultList.size());
     }
 
