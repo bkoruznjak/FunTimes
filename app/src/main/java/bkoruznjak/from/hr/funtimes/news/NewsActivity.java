@@ -3,11 +3,16 @@ package bkoruznjak.from.hr.funtimes.news;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -37,6 +42,9 @@ public class NewsActivity extends AppCompatActivity implements NewsActivityMVP.V
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         ((FunApplication) getApplication()).getAppComponent().inject(this);
 
+        Toolbar myToolbar = mBinding.toolbar;
+        setSupportActionBar(myToolbar);
+
         listAdapter = new ListAdapter(resultList);
         mBinding.recyclerView.setAdapter(listAdapter);
         mBinding.recyclerView.addItemDecoration(new DividerItemDecoration(this));
@@ -57,7 +65,46 @@ public class NewsActivity extends AppCompatActivity implements NewsActivityMVP.V
                 return false;
             }
         });
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView =
+                (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d("bbb", "text submitted:" + query);
+                MenuItemCompat.collapseActionView(searchItem);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d("bbb", "new:" + newText);
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                // User chose the "Settings" item, show the app settings UI...
+                Log.d("bbb", "search pressed");
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
