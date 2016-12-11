@@ -10,7 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -23,15 +23,16 @@ import javax.inject.Inject;
 
 import bkoruznjak.from.hr.funtimes.R;
 import bkoruznjak.from.hr.funtimes.databinding.ActivityMainBinding;
+import bkoruznjak.from.hr.funtimes.network.NetworkConstants;
 import bkoruznjak.from.hr.funtimes.root.FunApplication;
 
 public class NewsActivity extends AppCompatActivity implements NewsActivityMVP.View {
 
+    //todo need to implement starter persistance of the query string to survive orientation changes
+    private static String queryString = NetworkConstants.GENERIC_SEARCH_QUERY_STRING;
     @Inject
     NewsActivityMVP.Presenter presenter;
-
     ActivityMainBinding mBinding;
-
     private ListAdapter listAdapter;
     private List<ViewModel> resultList = new ArrayList<>();
     private int pageNumber = 0;
@@ -58,8 +59,7 @@ public class NewsActivity extends AppCompatActivity implements NewsActivityMVP.V
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     if (isLastItemDisplaying(mBinding.recyclerView)) {
-                        presenter.fetchMoreData(++pageNumber);
-                        Log.d("bbb", "loading data for page:" + pageNumber);
+                        presenter.fetchDataByPageAndQuery(++pageNumber, queryString);
                     }
                 }
                 return false;
@@ -75,16 +75,31 @@ public class NewsActivity extends AppCompatActivity implements NewsActivityMVP.V
                 (SearchView) MenuItemCompat.getActionView(searchItem);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            //todo need to figure out a better way to prevent onQueryTextChange after onQueryTextSubmit
+            boolean willReload = true;
+
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.d("bbb", "text submitted:" + query);
+                willReload = false;
                 MenuItemCompat.collapseActionView(searchItem);
-                return false;
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.d("bbb", "new:" + newText);
+                if (willReload) {
+                    if (TextUtils.isEmpty(newText)) {
+                        newText = NetworkConstants.GENERIC_SEARCH_QUERY_STRING;
+                    }
+                    queryString = newText;
+                    resultList.clear();
+                    listAdapter.notifyDataSetChanged();
+                    presenter.fetchDataByPageAndQuery(0, queryString);
+                } else {
+                    willReload = true;
+                }
+
                 return false;
             }
         });
@@ -97,7 +112,6 @@ public class NewsActivity extends AppCompatActivity implements NewsActivityMVP.V
         switch (item.getItemId()) {
             case R.id.action_search:
                 // User chose the "Settings" item, show the app settings UI...
-                Log.d("bbb", "search pressed");
                 return true;
 
             default:
@@ -111,7 +125,7 @@ public class NewsActivity extends AppCompatActivity implements NewsActivityMVP.V
     protected void onStart() {
         super.onStart();
         presenter.setView(this);
-        presenter.loadData();
+        presenter.fetchDataByPageAndQuery(0, queryString);
     }
 
     @Override
@@ -126,7 +140,6 @@ public class NewsActivity extends AppCompatActivity implements NewsActivityMVP.V
     public void updateData(ViewModel viewModel) {
         resultList.add(viewModel);
         listAdapter.notifyItemInserted(resultList.size() - 1);
-        Log.d("bbb", "updateData: " + resultList.size());
     }
 
     @Override

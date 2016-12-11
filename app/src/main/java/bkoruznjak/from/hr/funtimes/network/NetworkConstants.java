@@ -10,4 +10,5 @@ public class NetworkConstants {
     public static final String IMAGE_URL_PREFIX = "https://static01.nyt.com/";
     //query related
     public static final String SORT_NEWEST = "newest";
+    public static final String GENERIC_SEARCH_QUERY_STRING = "a";
 }

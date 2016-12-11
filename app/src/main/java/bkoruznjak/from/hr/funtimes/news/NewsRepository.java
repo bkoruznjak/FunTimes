@@ -26,7 +26,6 @@ public class NewsRepository implements Repository {
         this.timestamp = System.currentTimeMillis();
         this.timesApiService = timesApiService;
         results = new ArrayList<>();
-
     }
 
     public boolean isUpToDate() {
@@ -50,6 +49,40 @@ public class NewsRepository implements Repository {
         Observable<ArticleModel> newsObservable = timesApiService.listArticlesByPage(pageNumber, NetworkConstants.SORT_NEWEST);
 
         return newsObservable.concatMap(new Func1<ArticleModel, Observable<Doc>>() {
+            @Override
+            public Observable<Doc> call(ArticleModel articleModel) {
+                return Observable.from(articleModel.getResponse().getDocs());
+            }
+        }).doOnNext(new Action1<Doc>() {
+            @Override
+            public void call(Doc result) {
+                results.add(result);
+            }
+        });
+    }
+
+    @Override
+    public Observable<Doc> getQueryResultsFromNetwork(String queryString) {
+        Observable<ArticleModel> newsObservable = timesApiService.listArticlesByQuery(queryString, NetworkConstants.SORT_NEWEST);
+
+        return newsObservable.concatMap(new Func1<ArticleModel, Observable<? extends Doc>>() {
+            @Override
+            public Observable<Doc> call(ArticleModel articleModel) {
+                return Observable.from(articleModel.getResponse().getDocs());
+            }
+        }).doOnNext(new Action1<Doc>() {
+            @Override
+            public void call(Doc result) {
+                results.add(result);
+            }
+        });
+    }
+
+    @Override
+    public Observable<Doc> getResultsByQueryAndPage(int pageNumber, String queryString) {
+        Observable<ArticleModel> newsObservable = timesApiService.listArticlesByPageAndQuery(pageNumber, queryString, NetworkConstants.SORT_NEWEST);
+
+        return newsObservable.concatMap(new Func1<ArticleModel, Observable<? extends Doc>>() {
             @Override
             public Observable<Doc> call(ArticleModel articleModel) {
                 return Observable.from(articleModel.getResponse().getDocs());

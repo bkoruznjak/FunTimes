@@ -2,7 +2,6 @@ package bkoruznjak.from.hr.funtimes.network;
 
 import bkoruznjak.from.hr.funtimes.network.model.ArticleModel;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -19,6 +18,8 @@ public interface NYTimesService {
     Observable<ArticleModel> listArticlesByPage(@Query("page") int pageNumber, @Query("sort") String sort);
 
     @GET("svc/search/v2/articlesearch.json")
-    Observable<ArticleModel> listArticlesByQuery(@Path("q") String query, @Query("sort") String sort);
+    Observable<ArticleModel> listArticlesByQuery(@Query("q") String query, @Query("sort") String sort);
 
+    @GET("svc/search/v2/articlesearch.json")
+    Observable<ArticleModel> listArticlesByPageAndQuery(@Query("page") int pageNumber, @Query("q") String query, @Query("sort") String sort);
 }

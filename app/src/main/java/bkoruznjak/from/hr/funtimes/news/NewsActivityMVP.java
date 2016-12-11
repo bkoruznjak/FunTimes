@@ -27,6 +27,10 @@ public interface NewsActivityMVP {
         void rxUnsubscribe();
 
         void fetchMoreData(int pageNumber);
+
+        void fetchFilteredData(String queryString);
+
+        void fetchDataByPageAndQuery(int pagenumber, String Query);
     }
 
     interface Model {
@@ -35,5 +39,8 @@ public interface NewsActivityMVP {
 
         Observable<ViewModel> newResults(int pageNumber);
 
+        Observable<ViewModel> fileteredResults(String queryString);
+
+        Observable<ViewModel> filteredResultsByPageAndQuery(int pageNumber, String queryString);
     }
 }

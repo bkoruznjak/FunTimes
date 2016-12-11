@@ -87,4 +87,55 @@ public class NewsActivityPresenter implements NewsActivityMVP.Presenter {
             }
         });
     }
+
+    @Override
+    public void fetchFilteredData(String queryString) {
+        subscription = mRepositoryModel.fileteredResults(queryString).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ViewModel>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                if (mNewsView != null) {
+                    mNewsView.showSnackbar("Error fetching more news");
+                }
+            }
+
+            @Override
+            public void onNext(ViewModel viewModel) {
+                if (mNewsView != null) {
+                    mNewsView.updateData(viewModel);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void fetchDataByPageAndQuery(int pagenumber, String queryString) {
+        subscription = mRepositoryModel.filteredResultsByPageAndQuery(pagenumber, queryString).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ViewModel>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                if (mNewsView != null) {
+                    mNewsView.showSnackbar("Error fetching more news");
+                }
+            }
+
+            @Override
+            public void onNext(ViewModel viewModel) {
+                if (mNewsView != null) {
+                    mNewsView.updateData(viewModel);
+                }
+            }
+        });
+    }
+
+
 }
