@@ -22,24 +22,12 @@ public interface NewsActivityMVP {
 
         void setView(NewsActivityMVP.View view);
 
-        void loadData();
-
         void rxUnsubscribe();
-
-        void fetchMoreData(int pageNumber);
-
-        void fetchFilteredData(String queryString);
 
         void fetchDataByPageAndQuery(int pagenumber, String Query);
     }
 
     interface Model {
-
-        Observable<ViewModel> result();
-
-        Observable<ViewModel> newResults(int pageNumber);
-
-        Observable<ViewModel> fileteredResults(String queryString);
 
         Observable<ViewModel> filteredResultsByPageAndQuery(int pageNumber, String queryString);
     }

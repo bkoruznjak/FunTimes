@@ -11,11 +11,7 @@ public interface Repository {
 
     Observable<Doc> getResultsFromMemory();
 
-    Observable<Doc> getPageResultsFromNetwork(int pageNumber);
-
     Observable<Doc> getResultData();
-
-    Observable<Doc> getQueryResultsFromNetwork(String queryString);
 
     Observable<Doc> getResultsByQueryAndPage(int pageNumber, String queryString);
 

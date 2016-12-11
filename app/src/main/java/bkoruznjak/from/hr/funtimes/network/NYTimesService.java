@@ -12,14 +12,6 @@ import rx.Observable;
 public interface NYTimesService {
 
     @GET("svc/search/v2/articlesearch.json")
-    Observable<ArticleModel> listAllArticles(@Query("sort") String sort);
-
-    @GET("svc/search/v2/articlesearch.json")
-    Observable<ArticleModel> listArticlesByPage(@Query("page") int pageNumber, @Query("sort") String sort);
-
-    @GET("svc/search/v2/articlesearch.json")
-    Observable<ArticleModel> listArticlesByQuery(@Query("q") String query, @Query("sort") String sort);
-
-    @GET("svc/search/v2/articlesearch.json")
     Observable<ArticleModel> listArticlesByPageAndQuery(@Query("page") int pageNumber, @Query("q") String query, @Query("sort") String sort);
+
 }

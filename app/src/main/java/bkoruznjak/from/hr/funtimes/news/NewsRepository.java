@@ -32,7 +32,6 @@ public class NewsRepository implements Repository {
         return System.currentTimeMillis() - timestamp < CACHE_EXPIRATION_TIME;
     }
 
-
     @Override
     public Observable<Doc> getResultsFromMemory() {
         if (isUpToDate()) {
@@ -42,40 +41,6 @@ public class NewsRepository implements Repository {
             results.clear();
             return Observable.empty();
         }
-    }
-
-    @Override
-    public Observable<Doc> getPageResultsFromNetwork(int pageNumber) {
-        Observable<ArticleModel> newsObservable = timesApiService.listArticlesByPage(pageNumber, NetworkConstants.SORT_NEWEST);
-
-        return newsObservable.concatMap(new Func1<ArticleModel, Observable<Doc>>() {
-            @Override
-            public Observable<Doc> call(ArticleModel articleModel) {
-                return Observable.from(articleModel.getResponse().getDocs());
-            }
-        }).doOnNext(new Action1<Doc>() {
-            @Override
-            public void call(Doc result) {
-                results.add(result);
-            }
-        });
-    }
-
-    @Override
-    public Observable<Doc> getQueryResultsFromNetwork(String queryString) {
-        Observable<ArticleModel> newsObservable = timesApiService.listArticlesByQuery(queryString, NetworkConstants.SORT_NEWEST);
-
-        return newsObservable.concatMap(new Func1<ArticleModel, Observable<? extends Doc>>() {
-            @Override
-            public Observable<Doc> call(ArticleModel articleModel) {
-                return Observable.from(articleModel.getResponse().getDocs());
-            }
-        }).doOnNext(new Action1<Doc>() {
-            @Override
-            public void call(Doc result) {
-                results.add(result);
-            }
-        });
     }
 
     @Override
@@ -97,6 +62,6 @@ public class NewsRepository implements Repository {
 
     @Override
     public Observable<Doc> getResultData() {
-        return getResultsFromMemory().switchIfEmpty(getPageResultsFromNetwork(0));
+        return getResultsFromMemory().switchIfEmpty(getResultsByQueryAndPage(0, NetworkConstants.GENERIC_SEARCH_QUERY_STRING));
     }
 }

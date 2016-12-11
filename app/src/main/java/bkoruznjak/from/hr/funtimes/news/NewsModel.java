@@ -20,54 +20,6 @@ public class NewsModel implements NewsActivityMVP.Model {
     }
 
     @Override
-    public Observable<ViewModel> result() {
-        return repository.getResultData().map(new Func1<Doc, ViewModel>() {
-
-            @Override
-            public ViewModel call(Doc docResult) {
-                String mediaUrl = "";
-                if (docResult.getMultimedia() != null && !docResult.getMultimedia().isEmpty()) {
-                    mediaUrl = docResult.getMultimedia().get(0).getUrl();
-                }
-                String prettyTime = TimeConverter.INSTANCE.convertToPrettyTime(docResult.getPubDate(), new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ"));
-                return new ViewModel(docResult.getHeadline().getMain(), prettyTime, docResult.getAbstract(), mediaUrl);
-            }
-        });
-    }
-
-    @Override
-    public Observable<ViewModel> newResults(int pageNumber) {
-        return repository.getPageResultsFromNetwork(pageNumber).map(new Func1<Doc, ViewModel>() {
-
-            @Override
-            public ViewModel call(Doc docResult) {
-                String mediaUrl = "";
-                if (docResult.getMultimedia() != null && !docResult.getMultimedia().isEmpty()) {
-                    mediaUrl = docResult.getMultimedia().get(0).getUrl();
-                }
-                String prettyTime = TimeConverter.INSTANCE.convertToPrettyTime(docResult.getPubDate(), new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ"));
-                return new ViewModel(docResult.getHeadline().getMain(), prettyTime, docResult.getAbstract(), mediaUrl);
-            }
-        });
-    }
-
-    @Override
-    public Observable<ViewModel> fileteredResults(String queryString) {
-        return repository.getQueryResultsFromNetwork(queryString).map(new Func1<Doc, ViewModel>() {
-
-            @Override
-            public ViewModel call(Doc docResult) {
-                String mediaUrl = "";
-                if (docResult.getMultimedia() != null && !docResult.getMultimedia().isEmpty()) {
-                    mediaUrl = docResult.getMultimedia().get(0).getUrl();
-                }
-                String prettyTime = TimeConverter.INSTANCE.convertToPrettyTime(docResult.getPubDate(), new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ"));
-                return new ViewModel(docResult.getHeadline().getMain(), prettyTime, docResult.getAbstract(), mediaUrl);
-            }
-        });
-    }
-
-    @Override
     public Observable<ViewModel> filteredResultsByPageAndQuery(int pageNumber, String queryString) {
         return repository.getResultsByQueryAndPage(pageNumber, queryString).map(new Func1<Doc, ViewModel>() {
 
