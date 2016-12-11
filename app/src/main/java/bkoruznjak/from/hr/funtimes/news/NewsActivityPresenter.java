@@ -64,6 +64,7 @@ public class NewsActivityPresenter implements NewsActivityMVP.Presenter {
 
     @Override
     public void fetchMoreData(int pageNumber) {
+        mNewsView.showSnackbar("Fetching more news");
         subscription = mRepositoryModel.newResults(pageNumber).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ViewModel>() {
             @Override
             public void onCompleted() {
