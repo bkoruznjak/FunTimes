@@ -3,6 +3,7 @@ package bkoruznjak.from.hr.funtimes.news;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,7 +145,10 @@ public class NewsActivity extends AppCompatActivity implements NewsActivityMVP.V
 
     @Override
     public void showSnackbar(String s) {
-        Snackbar.make(mBinding.activityMain, s, Snackbar.LENGTH_SHORT).show();
+        Snackbar snack = Snackbar.make(mBinding.activityMain, s, Snackbar.LENGTH_SHORT);
+        ViewGroup group = (ViewGroup) snack.getView();
+        group.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        snack.show();
     }
 
     @Override

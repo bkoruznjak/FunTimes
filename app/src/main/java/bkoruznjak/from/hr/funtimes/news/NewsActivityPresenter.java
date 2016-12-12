@@ -39,6 +39,9 @@ public class NewsActivityPresenter implements NewsActivityMVP.Presenter {
 
     @Override
     public void fetchDataByPageAndQuery(int pagenumber, String queryString) {
+        if (mNewsView != null) {
+            mNewsView.showSnackbar("Fetching more news");
+        }
         subscription = mRepositoryModel.filteredResultsByPageAndQuery(pagenumber, queryString).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ViewModel>() {
             @Override
             public void onCompleted() {
