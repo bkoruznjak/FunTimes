@@ -20,8 +20,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class NewsApiModule {
 
-    public final String BASE_URL = "https://api.nytimes.com/";
-
     @Provides
     public OkHttpClient provideHttpClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -53,6 +51,6 @@ public class NewsApiModule {
 
     @Provides
     public NYTimesService provideNYTimesService() {
-        return provideRetrofitClient(BASE_URL, provideHttpClient()).create(NYTimesService.class);
+        return provideRetrofitClient(NetworkConstants.API_BASE_URL, provideHttpClient()).create(NYTimesService.class);
     }
 }
