@@ -2,6 +2,7 @@ package bkoruznjak.from.hr.funtimes.news;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,17 +46,17 @@ public class NewsCardAdapter extends RecyclerView.Adapter<NewsCardAdapter.ListIt
         holder.itemPublishedTime.setText(list.get(position).getPublishedTime());
         holder.itemAbstraction.setText(list.get(position).getAbstraction());
 
-        if (!"".equals(list.get(position).getMediaUrl())) {
+        if (TextUtils.isEmpty(list.get(position).getMediaUrl())) {
+            Glide.with(context)
+                    .load(R.drawable.img_placeholder)
+                    .crossFade()
+                    .into(holder.itemImageView);
+        } else {
             String realUrl = NetworkConstants.IMAGE_URL_PREFIX.concat(list.get(position).getMediaUrl());
             Glide.with(context)
                     .load(realUrl)
                     .centerCrop()
                     .placeholder(R.drawable.img_placeholder)
-                    .crossFade()
-                    .into(holder.itemImageView);
-        } else {
-            Glide.with(context)
-                    .load(R.drawable.img_placeholder)
                     .crossFade()
                     .into(holder.itemImageView);
         }
