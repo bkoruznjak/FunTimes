@@ -33,7 +33,7 @@ public class NewsActivity extends AppCompatActivity implements NewsActivityMVP.V
     @Inject
     NewsActivityMVP.Presenter presenter;
     ActivityMainBinding mBinding;
-    private ListAdapter listAdapter;
+    private NewsCardAdapter mNewsCardAdapter;
     private List<ViewModel> resultList = new ArrayList<>();
     private int pageNumber = 0;
 
@@ -46,9 +46,8 @@ public class NewsActivity extends AppCompatActivity implements NewsActivityMVP.V
         Toolbar myToolbar = mBinding.toolbar;
         setSupportActionBar(myToolbar);
 
-        listAdapter = new ListAdapter(resultList);
-        mBinding.recyclerView.setAdapter(listAdapter);
-        mBinding.recyclerView.addItemDecoration(new DividerItemDecoration(this));
+        mNewsCardAdapter = new NewsCardAdapter(resultList);
+        mBinding.recyclerView.setAdapter(mNewsCardAdapter);
 
         mBinding.recyclerView.setItemAnimator(new DefaultItemAnimator());
         mBinding.recyclerView.setHasFixedSize(true);
@@ -94,7 +93,7 @@ public class NewsActivity extends AppCompatActivity implements NewsActivityMVP.V
                     }
                     queryString = newText;
                     resultList.clear();
-                    listAdapter.notifyDataSetChanged();
+                    mNewsCardAdapter.notifyDataSetChanged();
                     presenter.fetchDataByPageAndQuery(0, queryString);
                 } else {
                     willReload = true;
@@ -133,13 +132,13 @@ public class NewsActivity extends AppCompatActivity implements NewsActivityMVP.V
         super.onStop();
         presenter.rxUnsubscribe();
         resultList.clear();
-        listAdapter.notifyDataSetChanged();
+        mNewsCardAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void updateData(ViewModel viewModel) {
         resultList.add(viewModel);
-        listAdapter.notifyItemInserted(resultList.size() - 1);
+        mNewsCardAdapter.notifyItemInserted(resultList.size() - 1);
     }
 
     @Override

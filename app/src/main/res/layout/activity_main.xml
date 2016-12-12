@@ -32,6 +32,6 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
             app:layout_constraintVertical_bias="1.0"
-            tools:listitem="@layout/article_item" />
+            tools:listitem="@layout/news_card_layout" />
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,12 +21,12 @@ import bkoruznjak.from.hr.funtimes.network.NetworkConstants;
  * Created by bkoruznjak on 06/12/2016.
  */
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListItemViewHolder> {
+public class NewsCardAdapter extends RecyclerView.Adapter<NewsCardAdapter.ListItemViewHolder> {
 
     private List<ViewModel> list;
     private Context context;
 
-    public ListAdapter(List<ViewModel> list) {
+    public NewsCardAdapter(List<ViewModel> list) {
         this.list = list;
     }
 
@@ -32,7 +34,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListItemViewHo
     public ListItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
         View itemView =
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.article_item, parent, false);
+                LayoutInflater.from(parent.getContext()).inflate(R.layout.news_card_layout, parent, false);
         return new ListItemViewHolder(itemView);
     }
 
@@ -57,14 +59,19 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListItemViewHo
                     .crossFade()
                     .into(holder.itemImageView);
         }
-
-
+        setScaleAnimation(holder.itemView);
     }
 
     @Override
     public int getItemCount() {
 
         return list.size();
+    }
+
+    private void setScaleAnimation(View view) {
+        ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        anim.setDuration(1000);
+        view.startAnimation(anim);
     }
 
     public static class ListItemViewHolder extends RecyclerView.ViewHolder {
